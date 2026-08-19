@@ -1,0 +1,37 @@
+# Governance forums surveyed, August 2026. Discourse instances only.
+# Six of the 35 returned nothing and are kept here for reproducibility.
+forum.pantherprotocol.io
+discourse.gooddollar.org
+forum.nexusmutual.io
+forum.gnosis.io
+gov.frax.finance
+forum.mux.network
+forum.superfluid.org
+gov.spectra.finance
+gov.stakedao.org
+forum.ssv.network
+horizen.discourse.group
+governance.walletconnect.network
+forum.skyeco.com
+forum.morpho.org
+gov.parallel.best
+forum.arbitrum.foundation
+forum.balancer.fi
+gov.1inch.network
+gov.optimism.io
+gov.uniswap.org
+governance.aave.com
+research.lido.fi
+discuss.ens.domains
+www.comp.xyz
+forum.safe.global
+gov.gitcoin.co
+forum.polygon.technology
+community.starknet.io
+forum.osmosis.zone
+dydx.forum
+forum.celo.org
+forum.cow.fi
+gov.yearn.fi
+forum.zknation.io
+forum.sushi.com

@@ -64,7 +64,11 @@ def main():
     counts, amounts = Counter(), defaultdict(list)
 
     with open("data/proposals.csv", "w", newline="") as f:
-        w = csv.writer(f)
+        # Explicit LF. The csv module defaults to CRLF, git rewrites it to LF on
+        # commit, and the file a cloner regenerates then differs from the file in
+        # the repository - which would make the byte-for-byte claim below false
+        # for everyone except the author.
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(["forum", "date", "category", "title", "author",
                     "replies", "amount_usd_low", "period", "hours", "url"])
         for row in sorted(rows, key=lambda r: (r["forum"], r["date"])):

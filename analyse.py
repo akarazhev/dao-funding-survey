@@ -43,10 +43,18 @@ def categorise(row):
     return "other"
 
 
-def amount(row):
-    """Smallest plausible figure in the post, on the assumption that it is
-    closer to a line item than to the treasury it is drawn from."""
-    best = None
+def plausible(row):
+    """Every figure in the post that falls inside the plausible range, sorted.
+
+    The published amount is the smallest of these, on the assumption that it
+    is closer to a line item than to the treasury it is drawn from. That
+    assumption is a guess, and on most rows carrying more than one figure it
+    is the guess - not the source - that decides the number. So the largest
+    is written out beside it and the count of candidates with them: a reader
+    can see at a glance which rows the rule actually chose for, and what the
+    other choice would have been.
+    """
+    values = []
     for raw in row["amounts"]:
         m = re.match(r"([\d.]+)\s*(k|m|million)?", raw.strip().lstrip("$").replace(",", ""), re.I)
         if not m:
@@ -54,14 +62,16 @@ def amount(row):
         value = float(m.group(1))
         suffix = (m.group(2) or "").lower()
         value *= 1_000 if suffix == "k" else 1_000_000 if suffix in ("m", "million") else 1
-        if FLOOR <= value <= CEILING and (best is None or value < best):
-            best = value
-    return best
+        if FLOOR <= value <= CEILING:
+            values.append(value)
+    return sorted(values)
 
 
 def main():
     rows = json.load(open("raw.json"))
-    counts, amounts = Counter(), defaultdict(list)
+    counts = Counter()
+    lows, highs = defaultdict(list), defaultdict(list)
+    decided_by_rule = 0
 
     with open("data/proposals.csv", "w", newline="") as f:
         # Explicit LF. The csv module defaults to CRLF, git rewrites it to LF on
@@ -70,27 +80,42 @@ def main():
         # for everyone except the author.
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["forum", "date", "category", "title", "author",
-                    "replies", "amount_usd_low", "period", "hours", "url"])
+                    "replies", "amount_usd_low", "amount_usd_high",
+                    "amounts_found", "period", "hours", "url"])
         for row in sorted(rows, key=lambda r: (r["forum"], r["date"])):
-            category, value = categorise(row), amount(row)
+            category, values = categorise(row), plausible(row)
             counts[category] += 1
-            if value:
-                amounts[category].append(value)
+            if values:
+                lows[category].append(values[0])
+                highs[category].append(values[-1])
+                if values[0] != values[-1]:
+                    decided_by_rule += 1
             w.writerow([defuse(c) for c in (
                 row["forum"], row["date"], category, row["title"], row["author"],
-                row["replies"], int(value) if value else "",
+                row["replies"],
+                int(values[0]) if values else "",
+                int(values[-1]) if values else "",
+                len(values) or "",
                 row["period"] or "", row["hours"] or "", row["url"])])
 
-    print(f"{'category':<18}{'n':>4}{'range':>26}{'median':>12}")
+    # Both ranges are printed because the difference between them is the size
+    # of the guess. A band quoted from the left column alone reads as measured
+    # when part of it was chosen.
+    print(f"{'category':<18}{'n':>4}{'amt':>5}"
+          f"{'range, lowest taken':>26}{'median':>10}{'range, highest taken':>26}")
     for category, n in counts.most_common():
-        values = sorted(amounts[category])
-        if values:
-            span = f"${min(values):,.0f} - ${max(values):,.0f}"
-            print(f"{category:<18}{n:>4}{span:>26}{values[len(values)//2]:>11,.0f}")
+        low, high = sorted(lows[category]), sorted(highs[category])
+        if low:
+            span_l = f"${low[0]:,.0f} - ${low[-1]:,.0f}"
+            span_h = f"${high[0]:,.0f} - ${high[-1]:,.0f}"
+            print(f"{category:<18}{n:>4}{len(low):>5}{span_l:>26}"
+                  f"{low[len(low)//2]:>9,.0f}{span_h:>26}")
         else:
-            print(f"{category:<18}{n:>4}{'not stated':>26}{'':>12}")
-    print(f"\n{sum(counts.values())} proposals, "
-          f"{sum(len(v) for v in amounts.values())} with an extractable amount")
+            print(f"{category:<18}{n:>4}{0:>5}{'not stated':>26}{'':>10}{'':>26}")
+    with_amount = sum(len(v) for v in lows.values())
+    print(f"\n{sum(counts.values())} proposals, {with_amount} with an extractable "
+          f"amount, of which {decided_by_rule} carried more than one candidate - "
+          f"there the smallest-figure rule, not the thread, set the number.")
 
 
 if __name__ == "__main__":

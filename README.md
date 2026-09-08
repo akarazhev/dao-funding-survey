@@ -15,25 +15,31 @@ Thirty-five forums were queried; 29 returned material. For each, recent topics w
 Four limits worth stating before any of the numbers are used:
 
 - **This is a sample, not a census.** Only recent topics were scanned, so the data skews to 2026 — 71 of 93 proposals — and older programmes are underrepresented.
-- **Amounts were extracted mechanically** and only 35 of 93 proposals yielded one. Where a proposal named several figures, the smallest plausible one was taken, on the assumption that it is closer to a line item than to a treasury total.
+- **Amounts were extracted mechanically** and only 35 of 93 proposals yielded one. Where a proposal named several figures, the smallest plausible one was taken, on the assumption that it is closer to a line item than to a treasury total. **That rule is doing more work than it looks:** 21 of those 35 rows named more than one plausible figure, so on three rows in five it is the rule rather than the thread that sets the number. The largest candidate is published beside the smallest, in `amount_usd_high`, so the size of that choice is visible per row instead of buried in the method.
 - **Keyword filtering misses things.** A proposal that never uses any of those eleven terms is invisible here.
 - **A posted proposal is not a funded one.** Outcome was recorded only where the thread stated it.
 
 ## What gets funded, and for how much
 
-| Category | Proposals | Amount range | Median |
-|---|--:|---|--:|
-| Engineering and tooling | 17 | $2,040 – $200,000 | $8,500 |
-| Governance and operations | 16 | $1,800 – $329,000 | $3,500 |
-| Data and monitoring | 9 | $2,000 – $10,000 | $5,000 |
-| Risk and treasury | 9 | $5,000 – $110,000 | $39,000 |
-| Growth and community | 9 | $600 – $30,000 | $30,000 |
-| Security and audit | 4 | not stated in-thread | — |
-| Other | 29 | $2,500 – $171,705 | $50,000 |
+| Category | Proposals | With an amount | Range, smallest taken | Median | Range, largest taken |
+|---|--:|--:|---|--:|---|
+| Engineering and tooling | 17 | 5 | $2,040 – $200,000 | $8,500 | $5,890 – $200,000 |
+| Governance and operations | 16 | 8 | $1,800 – $329,000 | $3,500 | $3,000 – $329,000 |
+| Data and monitoring | 9 | 4 | $2,000 – $10,000 | $5,000 | $10,000 – $15,000 |
+| Risk and treasury | 9 | 5 | $5,000 – $110,000 | $39,000 | $5,000 – $279,274 |
+| Growth and community | 9 | 2 | $600 – $30,000 | $30,000 | $1,200 – $50,000 |
+| Security and audit | 4 | 0 | not stated in-thread | — | — |
+| Other | 29 | 11 | $2,500 – $171,705 | $50,000 | $5,000 – $356,996 |
+
+**Read the third column before the fourth.** A range rests on the proposals that
+stated a figure, not on the proposals in the category, and for most categories
+that is a handful of rows. The last column is the same rows read the other way:
+where it moves a long way from the fourth, the band is a property of the
+extraction rule as much as of the forums.
 
 Two things stand out.
 
-**Data and monitoring is the tightest and cheapest band in the set** — $2,000 to $10,000, and nothing above it. Every proposal in that category is a bounded piece of work: a monitoring module, a pipeline, a set of checks. None of them is a platform.
+**Data and monitoring is the cheapest band in the set on the rule used here** — $2,000 to $10,000 — and that reading is thinner than it looks. Nine proposals fall in the category, four state a figure at all, and every one of those four named several, so the smallest-figure rule chose all four numbers. Read the same four rows the other way and the band is $10,000 to $15,000, which is neither the cheapest nor the tightest. **The price does not survive the choice; the shape does.** Every proposal in the category is a bounded piece of work — a monitoring module, a pipeline, a set of checks — and not one is a platform. That holds however the figures are read, because it comes from what the proposals describe rather than from what they cost.
 
 **Risk and treasury is bimodal**, which is why its median sits at $39,000 while its floor is $5,000. Small analytical pieces and large management mandates share a label but are not the same purchase. Which brings us to the vocabulary problem.
 
@@ -82,7 +88,7 @@ What the data suggests, stated as suggestions rather than rules:
 
 **Find where applications are open** before deciding whom to write to. An open call resolves the cold-contact problem, the trust problem, and the problem of guessing who holds the budget, all at once.
 
-**Ask for a small first scope.** Every funded example in the data-and-monitoring band is bounded work in the low single-digit thousands. Programmes say this outright when they bother to say anything.
+**Ask for a small first scope.** Every funded example in the data-and-monitoring band is bounded work — a module, a pipeline, a set of checks — priced somewhere between a few thousand and fifteen, depending on how the figures in the thread are read. Programmes say this outright when they bother to say anything.
 
 **Offer staged payment.** Twenty percent up front and the rest against delivery costs a stranger nothing to accept, and it is the cheapest way to make a first engagement possible.
 
@@ -106,7 +112,9 @@ requests.
 `analyse.py` assigns a category by keyword against title and body — first match
 wins, so the order in the file is the priority order — and takes the smallest
 figure between $500 and $500,000 as the amount, on the assumption that it is
-closer to a line item than to the treasury it is drawn from.
+closer to a line item than to the treasury it is drawn from. It writes the
+largest candidate and the number of candidates beside it, so a row where that
+assumption did the choosing is visible without re-reading the thread.
 
 Both choices are crude and both are visible in the code, which is the point: run
 it against `raw.json` and you get [`data/proposals.csv`](data/proposals.csv) byte
@@ -125,7 +133,7 @@ the analysis stays checkable regardless.
 
 ## Data
 
-[`data/proposals.csv`](data/proposals.csv) — 93 rows: forum, date, category, title, author, reply count, extracted amount, period, hours, and a link to the source thread.
+[`data/proposals.csv`](data/proposals.csv) — 93 rows: forum, date, category, title, author, reply count, the smallest and largest plausible amounts with the count of candidates between them, period, hours, and a link to the source thread. Where `amounts_found` is above one and the two amounts differ, the published figure is a choice, and the thread is one click away.
 
 [`raw.json`](raw.json) — what the collector saw, including a 300-character excerpt of each opening post. Categories are derived from these, so this is what to look at if a categorisation seems wrong.
 

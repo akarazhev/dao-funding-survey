@@ -1,23 +1,29 @@
 # What DAOs actually fund
 
-A survey of **93 funding proposals across 29 governance forums**, collected in August 2026.
+A survey of 93 funding proposals across 29 governance forums, collected in August 2026.
 
-I kept running into the same question while looking at DAO work: what does a DAO actually pay an outside contributor for, and how much? The answers are public — they sit in governance forums — but nobody had put them side by side. So I did.
+I kept running into the same question while looking at DAO work: what does a DAO actually pay an outside
+contributor for, and how much? The answers are public, in governance forums, but nobody had put them side by
+side. So I did.
 
-The dataset is in [`data/proposals.csv`](data/proposals.csv). Every row links to its source thread, so anything here can be checked.
+The dataset is in [`data/proposals.csv`](data/proposals.csv). Every row links to its source thread.
 
----
+## Method and limits
 
-## Method, and what it does not cover
+I queried 35 forums, and 29 returned material. On each, recent topics were filtered on eleven terms
+(`service provider`, `contributor`, `compensation`, `engagement`, `retainer`, `budget request`, `grant`,
+`funding request`, `proposal to fund`, `mandate`, `stipend`), and the opening post of each match was read for
+amounts, periods and hours.
 
-Thirty-five forums were queried; 29 returned material. For each, recent topics were filtered on eleven terms — `service provider`, `contributor`, `compensation`, `engagement`, `retainer`, `budget request`, `grant`, `funding request`, `proposal to fund`, `mandate`, `stipend` — and the opening post of each match was read for amounts, periods and hours.
+What to keep in mind before using the numbers:
 
-Four limits worth stating before any of the numbers are used:
-
-- **This is a sample, not a census.** Only recent topics were scanned, so the data skews to 2026 — 71 of 93 proposals — and older programmes are underrepresented.
-- **Amounts were extracted mechanically** and only 35 of 93 proposals yielded one. Where a proposal named several figures, the smallest plausible one was taken, on the assumption that it is closer to a line item than to a treasury total. **That rule is doing more work than it looks:** 21 of those 35 rows named more than one plausible figure, so on three rows in five it is the rule rather than the thread that sets the number. The largest candidate is published beside the smallest, in `amount_usd_high`, so the size of that choice is visible per row instead of buried in the method.
-- **Keyword filtering misses things.** A proposal that never uses any of those eleven terms is invisible here.
-- **A posted proposal is not a funded one.** Outcome was recorded only where the thread stated it.
+- It is a sample, not a census. Only recent topics were scanned, so 71 of the 93 proposals are from 2026.
+- Amounts were extracted mechanically, and only 35 of 93 proposals gave one. Where a proposal named several
+  figures, I took the smallest plausible one, assuming it is closer to a line item than to a treasury total.
+  That rule matters: 21 of the 35 named more than one figure. The largest candidate is published next to it in
+  `amount_usd_high`, so you can see the effect row by row.
+- A proposal that never uses any of the eleven terms is invisible here.
+- A posted proposal is not a funded one. The outcome was recorded only where the thread stated it.
 
 ## What gets funded, and for how much
 
@@ -28,116 +34,103 @@ Four limits worth stating before any of the numbers are used:
 | Data and monitoring | 9 | 4 | $2,000 – $10,000 | $5,000 | $10,000 – $15,000 |
 | Risk and treasury | 9 | 5 | $5,000 – $110,000 | $39,000 | $5,000 – $279,274 |
 | Growth and community | 9 | 2 | $600 – $30,000 | $30,000 | $1,200 – $50,000 |
-| Security and audit | 4 | 0 | not stated in-thread | — | — |
+| Security and audit | 4 | 0 | not stated in-thread | | |
 | Other | 29 | 11 | $2,500 – $171,705 | $50,000 | $5,000 – $356,996 |
 
-**Read the third column before the fourth.** A range rests on the proposals that
-stated a figure, not on the proposals in the category, and for most categories
-that is a handful of rows. The last column is the same rows read the other way:
-where it moves a long way from the fourth, the band is a property of the
-extraction rule as much as of the forums.
+Look at the "With an amount" column first: each range rests on a handful of rows. Where the last column is far
+from the fourth, the band depends on the extraction rule as much as on the forums.
 
-Two things stand out.
+**Data and monitoring** comes out cheapest, $2,000 to $10,000, but that is thin. Four of its nine proposals state
+a figure, all four named several, and read the other way the band is $10,000 to $15,000. What holds either way
+is the shape of the work: every proposal in the category is a bounded piece (a monitoring module, a pipeline,
+a set of checks), and none is a platform.
 
-**Data and monitoring is the cheapest band in the set on the rule used here** — $2,000 to $10,000 — and that reading is thinner than it looks. Nine proposals fall in the category, four state a figure at all, and every one of those four named several, so the smallest-figure rule chose all four numbers. Read the same four rows the other way and the band is $10,000 to $15,000, which is neither the cheapest nor the tightest. **The price does not survive the choice; the shape does.** Every proposal in the category is a bounded piece of work — a monitoring module, a pipeline, a set of checks — and not one is a platform. That holds however the figures are read, because it comes from what the proposals describe rather than from what they cost.
+**Risk and treasury** has two kinds of proposal under one label, small analytical pieces and large management
+mandates, which is why the median is $39,000 while the floor is $5,000.
 
-**Risk and treasury is bimodal**, which is why its median sits at $39,000 while its floor is $5,000. Small analytical pieces and large management mandates share a label but are not the same purchase. Which brings us to the vocabulary problem.
+## "Treasury management" means running the money
 
-## "Treasury management" does not mean what an analyst assumes
+In DAO usage it means managing the reserves, not analysing them.
 
-In DAO usage it means running the money, not analysing it.
+Compound's [Request for Proposals](https://www.comp.xyz/t/7867) sought professional managers for an initial
+**$20–25M allocation** of DAO reserves, across tokenised treasuries, conservative DeFi, liquidity provision and
+delta-neutral yield. Applicants included tokenisation platforms with hundreds of millions in TVL.
 
-Compound's [Request for Proposals](https://www.comp.xyz/t/7867) sought professional managers for an initial **$20–25M allocation** of DAO reserves, with strategies spanning tokenised treasuries, conservative DeFi, liquidity provision and delta-neutral yield. Applicants included tokenisation platforms with hundreds of millions in TVL.
-
-Gnosis DAO's [GIP-148](https://forum.gnosis.io/t/11957) is the same shape and instructive for a different reason. Its scope reads: operational treasury, **active asset management**, *risk and reporting infrastructure*, governance participation. Risk reporting is in there — but bundled into a mandate that also moves the money.
-
-That bundling is the pattern. Across this sample there is no open call for risk analysis and reporting as a standalone service. It exists as a component of a manager's remit, alongside custody of the decision.
+Gnosis DAO's [GIP-148](https://forum.gnosis.io/t/11957) has the same shape: operational treasury, active asset
+management, risk and reporting infrastructure, governance participation. Risk reporting is there, but bundled
+into a mandate that also moves the money. In this sample I found no open call for risk analysis and reporting
+as a standalone service.
 
 ## Three kinds of open call
 
-Everything found divides into three, and they buy different things.
+- **Treasury management RFPs** buy discretionary asset management. They are large, few, and closed to anyone
+  who cannot take responsibility for capital.
+- **Development grants** buy something built for the ecosystem: Optimism's Season 9 council, Celo's CICLOPS and
+  Communities Guild, Superfluid's seasonal campaigns, Morpho's [MIP 93](https://forum.morpho.org/t/1177).
+  Usually milestone-based and one-off.
+- **Service provider programmes** buy ongoing work from a named provider. [ENS SPP](https://discuss.ens.domains/t/22131)
+  is the clearest example: seasonal, scored against a rubric, with public calls where applicants can ask the
+  committee questions. One question keeps coming up there: how much a prior delivery record decides the outcome.
 
-**Treasury management RFPs** buy discretionary asset management. Large, few, and closed to anyone who cannot take responsibility for capital.
+Only the last of the three routinely buys a service rather than an asset manager or an artefact.
 
-**Development grants** buy something built for the ecosystem — Optimism's Season 9 council, Celo's CICLOPS and Communities Guild, Superfluid's seasonal campaigns, Morpho's [MIP 93](https://forum.morpho.org/t/1177). Usually milestone-based, usually one-off.
+## Two cases side by side
 
-**Service provider programmes** buy ongoing work from a named provider. [ENS SPP](https://discuss.ens.domains/t/22131) is the clearest example: seasonal, rubric-scored, with public calls where applicants can ask the committee how it weighs evidence. In the questions applicants ask there, one recurs — how heavily does a prior delivery record decide the outcome.
+**Quantir** is a three-person team with a working DeFi risk monitoring platform: live collectors, transaction
+monitoring, risk scoring, alerts with explanations, API and WebSocket access, deployed across several protocols
+and chains. On 25 April 2026 they applied to two DAOs on the same day, outside any announced call:
 
-Of the three, only the last routinely buys a *service* rather than an asset manager or an artefact.
+- [CoW Protocol](https://forum.cow.fi/t/grant-application-quantir-risk-intelligence-layer-for-cow-protocol/3434)
+  declined within two days: *"we have reviewed this internally and, at this time, we're not interested in moving
+  forward."*
+- [Balancer](https://forum.balancer.fi/t/grant-application-quantir-risk-monitoring-explainable-alerts-for-balancer-pools/7035)
+  had not replied after nearly four months.
 
-## Two cases worth putting side by side
+That says nothing about the quality of their work; their product was further along than most in this dataset.
 
-These are the clearest illustration in the dataset that **channel and scope matter more than product readiness**.
+**MIP 93** went the other way. Morpho's grants pilot put up 200,000 MORPHO, invited public applications and asked
+applicants to pick a small initial scope and reapply in a later round. It drew 119 submissions. Among the things
+it funded, according to a contributor in a [later thread](https://forum.morpho.org/t/2246), was an institutional
+risk radar at **15,000 MORPHO, paid 20% up front, 20% on delivery and the rest against objective metrics**.
 
-**Quantir** is a three-person engineering team with a working DeFi risk monitoring platform — live collectors, transaction monitoring, normalised risk scoring, alert delivery, an explanation module, API and WebSocket interfaces, deployed across several protocols and chains. On 25 April 2026 they applied to two DAOs on the same day, unsolicited, outside any announced call:
-
-- [CoW Protocol](https://forum.cow.fi/t/grant-application-quantir-risk-intelligence-layer-for-cow-protocol/3434) declined within two days: *"we have reviewed this internally and, at this time, we're not interested in moving forward."*
-- [Balancer](https://forum.balancer.fi/t/grant-application-quantir-risk-monitoring-explainable-alerts-for-balancer-pools/7035) has not replied in nearly four months.
-
-Nothing here reflects on the quality of their work — by the standard of "is it built", they were further along than most applicants in this dataset.
-
-**MIP 93** points the other way. Morpho's grants pilot put up 200,000 MORPHO, invited public applications, and explicitly asked applicants to *pick a small initial scope and reapply in a later round*. It drew 119 submissions. Among the things it funded, per a contributor in a [later thread](https://forum.morpho.org/t/2246), was an institutional risk radar at **15,000 MORPHO, paid 20% up front, 20% on delivery, and the remainder against objective metrics**.
-
-A risk tool, funded. The same category that was declined elsewhere.
-
-The difference is not the product. It is that one arrived inside an announced call, at a deliberately small scope, with payment staged against delivery — and the other arrived unannounced, as a whole platform, asking to be evaluated on its merits.
+So a risk tool did get funded. It came inside an announced call, at a small scope, with payment staged against
+delivery. The declined one came unannounced, as a whole platform.
 
 ## If you are trying to get funded
 
-What the data suggests, stated as suggestions rather than rules:
+These are suggestions from the data, not rules:
 
-**Find where applications are open** before deciding whom to write to. An open call resolves the cold-contact problem, the trust problem, and the problem of guessing who holds the budget, all at once.
-
-**Ask for a small first scope.** Every funded example in the data-and-monitoring band is bounded work — a module, a pipeline, a set of checks — priced somewhere between a few thousand and fifteen, depending on how the figures in the thread are read. Programmes say this outright when they bother to say anything.
-
-**Offer staged payment.** Twenty percent up front and the rest against delivery costs a stranger nothing to accept, and it is the cheapest way to make a first engagement possible.
-
-**Do not expect a built product to substitute for any of the above.** The clearest negative case in this dataset had the most finished product in it.
+- **Look for open calls first.** They answer the questions of whom to write to, whether you will be trusted and
+  who holds the budget.
+- **Ask for a small first scope.** Every funded example in data and monitoring is bounded work, priced between a
+  few thousand and fifteen thousand dollars, depending on how the figures are read.
+- **Offer staged payment.** Twenty percent up front and the rest on delivery is easy for a stranger to accept.
+- **A finished product doesn't replace any of this.** The clearest refusal here had the most finished product.
 
 ## Reproducing this
 
-No dependencies beyond a Python 3 install. Discourse exposes `/latest.json` and
-`/t/{id}.json` without authentication, which is the whole reason this is cheap to run.
+Python 3 only. Discourse serves `/latest.json` and `/t/{id}.json` without authentication.
 
 ```sh
 python3 collect.py forums.txt   # -> raw.json
 python3 analyse.py              # -> data/proposals.csv, prints the table above
 ```
 
-`collect.py` reads the 35 forums in [`forums.txt`](forums.txt), scans two pages of
-recent topics on each, keeps titles matching the eleven keywords, and reads the
-opening post of the six newest matches per forum. It pauses half a second between
-requests.
-
-`analyse.py` assigns a category by keyword against title and body — first match
-wins, so the order in the file is the priority order — and takes the smallest
-figure between $500 and $500,000 as the amount, on the assumption that it is
-closer to a line item than to the treasury it is drawn from. It writes the
-largest candidate and the number of candidates beside it, so a row where that
-assumption did the choosing is visible without re-reading the thread.
-
-Both choices are crude and both are visible in the code, which is the point: run
-it against `raw.json` and you get [`data/proposals.csv`](data/proposals.csv) byte
-for byte, so any disagreement is with a rule you can read rather than with a
-number you have to trust.
-
-Cells opening with `=`, `+`, `-` or `@` are prefixed with a quote before being
-written. Titles are whatever someone typed into a forum, and a spreadsheet would
-treat such a cell as a formula — a published dataset should not be able to do
-anything to the person who opens it. No row in this sample needed it; the guard
-is for the next run.
-
-Re-running `collect.py` today will not reproduce this dataset. Forums move on,
-and the sample is whatever was recent in August 2026. `raw.json` is committed so
-the analysis stays checkable regardless.
+`collect.py` reads the 35 forums in [`forums.txt`](forums.txt), scans two pages of recent topics, keeps titles
+that match the eleven terms and reads the opening post of the six newest matches per forum. `analyse.py` picks
+a category by the first matching keyword and takes the smallest figure between $500 and $500,000, writing the
+largest candidate and the number of candidates next to it. Running it on the committed `raw.json` reproduces
+`data/proposals.csv` byte for byte. Running `collect.py` today won't reproduce the dataset, because forums move
+on.
 
 ## Data
 
-[`data/proposals.csv`](data/proposals.csv) — 93 rows: forum, date, category, title, author, reply count, the smallest and largest plausible amounts with the count of candidates between them, period, hours, and a link to the source thread. Where `amounts_found` is above one and the two amounts differ, the published figure is a choice, and the thread is one click away.
+- [`data/proposals.csv`](data/proposals.csv): 93 rows with forum, date, category, title, author, reply count, the
+  smallest and largest plausible amounts with the number of candidates, period, hours and a link to the thread.
+- [`raw.json`](raw.json): what the collector saw, with a 300-character excerpt of each opening post.
 
-[`raw.json`](raw.json) — what the collector saw, including a 300-character excerpt of each opening post. Categories are derived from these, so this is what to look at if a categorisation seems wrong.
-
-Corrections are welcome. If a proposal is miscategorised, an amount is wrong, or an outcome is recorded that the thread does not support, the source link is right there and I would rather fix it than leave it.
+If a proposal is in the wrong category, an amount is wrong, or an outcome isn't supported by its thread, tell me
+and I'll fix it.
 
 ---
 
